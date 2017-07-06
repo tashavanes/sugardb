@@ -1,13 +1,19 @@
 defmodule Sugardb.ResultController do
   use Sugardb.Web, :controller
 
+# alias makes it easy short form the Result
   alias Sugardb.Result
 
+#imports the query params we need here
+  import Ecto.Query
+
+# now begins each defined function
+
   def index(conn, _params) do
-    results = Repo.all(Result)
+    results = Repo.all(from(r in Result, order_by: [r.type, desc: r.value]))
     render(conn, "index.html", results: results)
   end
-
+ 
   def new(conn, _params) do
     changeset = Result.changeset(%Result{})
     render(conn, "new.html", changeset: changeset)
